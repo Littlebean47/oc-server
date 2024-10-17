@@ -19,7 +19,7 @@ io.on('connection', (socket) => {
     onlineUsers.push(username)
 
     // Show online users
-    socket.broadcast.emit("online users", onlineUsers)
+    io.emit("online users", onlineUsers)
 
     socket.emit("welcome", `Welcome, ${username}`)
 
