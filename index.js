@@ -12,8 +12,11 @@ const PORT = process.env.PORT || 3001
 app.use(express.static('public'));
 app.use(cors());
 
+// Define Online Users
+let onlineUsers = []
 io.on('connection', (socket) => {
     const username = socket.handshake.query.username;
+    onlineUsers.push(username)
 
     socket.emit("welcome", `Welcome, ${username}`)
 
@@ -30,6 +33,7 @@ io.on('connection', (socket) => {
 
     socket.on('disconnect', () => {
         console.log('User disconnected');
+        onlineUsers = onlineUsers.filter((user) => user !== username)
     });
 });
 
