@@ -18,6 +18,9 @@ io.on('connection', (socket) => {
     const username = socket.handshake.query.username;
     onlineUsers.push(username)
 
+    // Show online users
+    socket.broadcast.emit("online users", onlineUsers)
+
     socket.emit("welcome", `Welcome, ${username}`)
 
     socket.broadcast.emit("user joined", {
@@ -34,6 +37,7 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         console.log('User disconnected');
         onlineUsers = onlineUsers.filter((user) => user !== username)
+        io.emit("online users", onlineUsers)
     });
 });
 
