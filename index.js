@@ -13,10 +13,14 @@ app.use(express.static('public'));
 app.use(cors());
 
 io.on('connection', (socket) => {
-    // Receive and Send username to clients
-    socket.on("username", (name) => {
-        socket.emit('message', `${name} Joined the server`);
-    })
+    const username = socket.handshake.query.username;
+
+    socket.emit("welcome", `Welcome, ${username}`)
+
+    socket.broadcast.emit("user joined", {
+        message: `${username} has joined the chat`,
+        key: Math.random(),
+    });
 
     // Receiving messages from client
     socket.on('chat message', (msg) => {
